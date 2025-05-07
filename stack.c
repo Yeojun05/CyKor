@@ -72,18 +72,17 @@ void print_stack()
     }
     printf("================================\n\n");
 }
-void push(int i)
+void push(int i,char name[20])
 {
     SP++;
     call_stack[SP] = i;
+    strcpy_s(stack_info[SP], sizeof(stack_info[SP]), name);
 }
 
 void prologue(int num,char name[20])
 {
-    push(-1);
-    strcpy_s(stack_info[SP], sizeof(stack_info[SP]),"Return Address");
-    push(FP);
-    strcpy_s(stack_info[SP], sizeof(stack_info[SP]), name);
+    push(-1, "Return Address");
+    push(FP,name);
     FP = SP;
     SP += num;
 }
@@ -110,12 +109,10 @@ void epilogue()
 void func1(int arg1, int arg2, int arg3)
 {
     int var_1 = 100;
-    push(arg3);
-    strcpy_s(stack_info[SP], sizeof(stack_info[SP]), "arg3");
-    push(arg2);
-    strcpy_s(stack_info[SP], sizeof(stack_info[SP]), "arg2");
-    push(arg1);
-    strcpy_s(stack_info[SP], sizeof(stack_info[SP]), "arg1");
+    push(arg3, "arg3");
+    push(arg2, "arg2");
+    push(arg1, "arg1");
+    
     prologue(1, "func1 SFP");
     call_stack[FP + 1] = var_1;
     strcpy_s(stack_info[FP + 1], sizeof(stack_info[FP + 1]), "var_1");
@@ -137,10 +134,8 @@ void func2(int arg1, int arg2)
     int var_2 = 200;
 
     // func2의 스택 프레임 형성 (함수 프롤로그 + push)
-    push(arg2);
-    strcpy_s(stack_info[SP], sizeof(stack_info[SP]), "arg2");
-    push(arg1);
-    strcpy_s(stack_info[SP], sizeof(stack_info[SP]), "arg1");
+    push(arg2,"arg2");
+    push(arg1,"arg1");
     prologue(1, "func2 SFP");
     call_stack[FP + 1] = var_2;
     strcpy_s(stack_info[FP + 1], sizeof(stack_info[FP + 1]), "var_2");
@@ -160,8 +155,7 @@ void func3(int arg1)
     int var_4 = 400;
 
     // func3의 스택 프레임 형성 (함수 프롤로그 + push)
-    push(arg1);
-    strcpy_s(stack_info[SP], sizeof(stack_info[SP]), "arg1");
+    push(arg1, "arg1");
     prologue(2, "func3 SFP");
     call_stack[FP + 1] = var_3;
     strcpy_s(stack_info[FP + 1], sizeof(stack_info[FP + 1]), "var_3");
