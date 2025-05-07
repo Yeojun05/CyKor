@@ -96,10 +96,6 @@ int pop()
 }
 void epilogue()
 {
-    for (int i = SP; i > FP; i--)
-    {
-        call_stack[SP] = -1;
-    }
     SP = FP;
     FP = pop();
     pop();
